@@ -8,7 +8,7 @@ export const token = {
     set(value) {
         privateApi.defaults.headers.Authorization = value;
     },
-    unSet(value) {
+    unSet() {
         privateApi.defaults.headers.Authorization = null;
     },
 };  

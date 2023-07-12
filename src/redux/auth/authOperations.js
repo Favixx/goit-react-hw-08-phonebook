@@ -20,6 +20,7 @@ export const registerThunk = createAsyncThunk(
         try {
             const response = await privateApi.post('/users/signup', body);
             token.set(response.data.token);
+
             return response.data;
         } catch (error) {
             return rejectWithValue();
