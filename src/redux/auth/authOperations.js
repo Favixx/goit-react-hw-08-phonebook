@@ -6,9 +6,9 @@ export const loginThunk = createAsyncThunk(
     'auth/login',
     async (body, { rejectWithValue }) => {
         try {
-            const responce = await privateApi.post('/users/login', body);
-            token.set(responce.data.token);
-            return responce.data;
+            const response = await privateApi.post('/users/login', body);
+            token.set(response.data.token);
+            return response.data;
         } catch (error) {
             return rejectWithValue();
         }
@@ -18,9 +18,9 @@ export const registerThunk = createAsyncThunk(
     'auth/register',
     async (body, { rejectWithValue }) => {
         try {
-            const responce = await privateApi.post('/users/signup', body);
-            token.set(responce.data.token);
-            return responce.data;
+            const response = await privateApi.post('/users/signup', body);
+            token.set(response.data.token);
+            return response.data;
         } catch (error) {
             return rejectWithValue();
         }
@@ -37,9 +37,9 @@ export const getUserThunk = createAsyncThunk(
             }
             token.set(tokenValue);
 
-            const responce = await privateApi.get('/users/current');
+            const response = await privateApi.get('/users/current');
 
-            return responce.data;
+            return response.data;
         } catch (error) {
             token.unSet();
             return rejectWithValue();
@@ -51,9 +51,9 @@ export const logoutThunk = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const responce = await privateApi.post('/users/logout');
+            const response = await privateApi.post('/users/logout');
             token.unSet();
-            return responce.data;
+            return response.data;
         } catch (error) {
             return rejectWithValue();
         }

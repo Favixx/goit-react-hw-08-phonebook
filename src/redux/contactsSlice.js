@@ -1,54 +1,76 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllContacts, addNewContact, removeContact } from './contactsOperations';
+import { fetchContacts, addContact, deleteContact } from './contactsOperations';
 
 const initialState = {
-    items: [],
+    contacts: [],
+    filter: '',
     isLoading: false,
-    error: null,
+    isError: null,
+    visibleForm: false,
 };
+
 const contactsSlice = createSlice({
     name: 'contacts',
     initialState,
-    reducers: {},
+    reducers: {
+        getFilter(state, action) {
+            state.filter = action.payload;
+        },
+        toogleVisibleForm(state) {
+            state.visibleForm = !state.visibleForm;
+        },
+        logOutContacts(state) {
+            state.contacts = [];
+            state.filter = '';
+            state.isLoading = false;
+            state.isError = null;
+            state.visibleForm = false;
+        },
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllContacts.pending, (state) => {
+            .addCase(fetchContacts.pending, (state) => {
                 state.isLoading = true;
-                state.error = null;
+                state.isError = null;
             })
-            .addCase(fetchAllContacts.fulfilled, (state, action) => {
+            .addCase(fetchContacts.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.items = action.payload;
+                state.contacts = action.payload;
             })
-            .addCase(fetchAllContacts.rejected, (state, action) => {
+            .addCase(fetchContacts.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.isError = action.payload;
             })
-            .addCase(addNewContact.pending, (state) => {
+            .addCase(addContact.pending, (state) => {
                 state.isLoading = true;
-                state.error = null;
+                state.isError = null;
             })
-            .addCase(addNewContact.fulfilled, (state, action) => {
+            .addCase(addContact.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.items = [action.payload, ...state.items];
+                state.contacts.push(action.payload);
+                state.visibleForm = !state.visibleForm;
             })
-            .addCase(addNewContact.rejected, (state, action) => {
+            .addCase(addContact.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.isError = action.payload;
             })
-            .addCase(removeContact.pending, (state) => {
+            .addCase(deleteContact.pending, (state) => {
                 state.isLoading = true;
-                state.error = null;
+                state.isError = null;
             })
-            .addCase(removeContact.fulfilled, (state, action) => {
+            .addCase(deleteContact.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.items = state.items.filter((contact) => contact.id !== action.payload.id);
+                state.contacts = state.contacts.filter(
+                    (contact) => contact.id !== action.payload.id
+                );
             })
-            .addCase(removeContact.rejected, (state, action) => {
+            .addCase(deleteContact.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.isError = action.payload;
             });
     },
 });
 
+export const { getFilter, toogleVisibleForm, logOutContacts } =
+    contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;

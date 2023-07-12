@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAllContacts, removeContact } from '../../redux/contactsOperations.js';
-import { filterSearchSelector } from 'redux/selectors';
+import { fetchContacts, deleteContact } from '../../redux/contactsOperations.js';
+import { selectFilterSearch } from 'redux/selectors';
 import { selectIsAuth } from 'redux/auth/authSelector.js';
 
 const ContactsList = () => {
-    const visibleContacts = useSelector(filterSearchSelector)
+    const visibleContacts = useSelector(selectFilterSearch)
     const dispatch = useDispatch();
+    const isAuth = useSelector(selectIsAuth)
     useEffect(() => {
         if (isAuth) {
-            dispatch(getContactsThunk());
+            dispatch(fetchContacts());
         }
     }, [dispatch, isAuth]);
 
@@ -22,7 +23,7 @@ const ContactsList = () => {
                         <span className="text-gray-500"> : {contact.phone}</span>
                         <button
                             className="ml-2 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:ring focus:border-red-300"
-                            onClick={() => dispatch(removeContact(contact.id))}
+                            onClick={() => dispatch(deleteContact(contact.id))}
                         >
                             Delete
                         </button>
