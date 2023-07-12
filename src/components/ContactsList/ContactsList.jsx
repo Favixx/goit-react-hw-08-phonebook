@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAllContacts, removeContact } from '../../redux/operations.js';
+import { fetchAllContacts, removeContact } from '../../redux/contactsOperations.js';
 import { filterSearchSelector } from 'redux/selectors';
 
 const ContactsList = () => {
