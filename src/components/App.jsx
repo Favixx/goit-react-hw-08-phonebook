@@ -26,12 +26,10 @@ export const App = () => {
         <Navigation />
       )}
       <Routes>
-        <Route path='/' element={<Navigate to={'/'} />} />
-
-        <Route path='/' element={<PrivateRoute />}>
-          <Route path='/contacts' element={<Contacts />} />
+        <Route path="/" element={<PrivateRoute />}>
+          <Route index element={<Navigate to="/contacts" />} />
+          <Route path="/contacts" element={<Contacts />} />
         </Route>
-
         <Route path="/" element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
