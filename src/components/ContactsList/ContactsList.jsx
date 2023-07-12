@@ -2,13 +2,17 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAllContacts, removeContact } from '../../redux/contactsOperations.js';
 import { filterSearchSelector } from 'redux/selectors';
+import { selectIsAuth } from 'redux/auth/authSelector.js';
 
 const ContactsList = () => {
     const visibleContacts = useSelector(filterSearchSelector)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchAllContacts());
-    }, [dispatch]);
+        if (isAuth) {
+            dispatch(getContactsThunk());
+        }
+    }, [dispatch, isAuth]);
+
     return (
         <div>
             <ul className="divide-y divide-gray-200 flex justify-center gap-3">
