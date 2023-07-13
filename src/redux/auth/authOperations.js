@@ -1,9 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { privateApi, token } from './api';
-import { authSlice } from './authSlice';
 import { toast } from 'react-toastify';
 
-export const loginThunk = createAsyncThunk(
+export const logIn = createAsyncThunk(
     'auth/login',
     async (body, { rejectWithValue }) => {
         try {
@@ -26,21 +25,30 @@ export const loginThunk = createAsyncThunk(
     }
 );
 
-export const registerThunk = createAsyncThunk(
+export const register = createAsyncThunk(
     'auth/register',
-    async (body, { rejectWithValue, dispatch }) => {
+    async (body, { rejectWithValue }) => {
         try {
             const response = await privateApi.post('/users/signup', body);
             token.set(response.data.token);
-            dispatch(authSlice.actions.setToken(response.data.token));
             return response.data;
         } catch (error) {
-            return rejectWithValue();
+            toast.error('Email or password is invalid, use valid data for registration', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return rejectWithValue(error.message);
         }
     }
 );
 
-export const getUserThunk = createAsyncThunk(
+export const refreshUser = createAsyncThunk(
     'auth/getUser',
     async (_, { rejectWithValue, getState }) => {
         try {
@@ -59,7 +67,7 @@ export const getUserThunk = createAsyncThunk(
     }
 );
 
-export const logoutThunk = createAsyncThunk(
+export const logOut = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {

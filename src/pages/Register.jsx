@@ -1,10 +1,12 @@
-import { registerThunk } from '../redux/auth/authOperations';
+import { register } from '../redux/auth/authOperations';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { selectIsAuth } from 'redux/auth/authSelector';
 
 export const Register = () => {
     const navigate = useNavigate()
+    const isAuth = useSelector(selectIsAuth)
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -27,13 +29,21 @@ export const Register = () => {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        dispatch(registerThunk({ name, email, password }));
-        setName('');
-        setEmail('');
-        setPassword('');
-        navigate('/login')
+        try {
+            await dispatch(register({ name, email, password }));
+            setName('');
+            setEmail('');
+            setPassword('');
+            if (isAuth) {
+                navigate('/contacts')
+            }
+        }
+        catch (error) {
+            console.error('Ошибка при регистрации:', error);
+
+        }
     };
 
     return (

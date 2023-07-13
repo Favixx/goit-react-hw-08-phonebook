@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuth } from '../redux/auth/authSelector';
 import { PrivateRoute } from './Routes/PrivateRoute';
 import { PublicRoute } from './Routes/PublicRoute';
-import { getUserThunk } from '../redux/auth/authOperations'
+import { refreshUser } from '../redux/auth/authOperations'
 import { UserMenu } from './UserMenu/UserMenu';
 import Navigation from './Navigation/Navigation';
 import { ToastContainer } from 'react-toastify';
@@ -19,7 +19,7 @@ export const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !isAuth && dispatch(getUserThunk())
+    !isAuth && dispatch(refreshUser())
   }, [dispatch, isAuth])
   return (
     <>

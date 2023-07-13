@@ -1,4 +1,4 @@
-import { loginThunk } from '../redux/auth/authOperations';
+import { logIn } from '../redux/auth/authOperations';
 import 'react-toastify/dist/ReactToastify.css';
 
 import React, { useEffect, useState } from 'react';
@@ -35,7 +35,7 @@ export const Login = () => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        dispatch(loginThunk({ email, password }));
+        dispatch(logIn({ email, password }));
         setEmail('');
         setPassword('');
     };

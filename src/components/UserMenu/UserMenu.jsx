@@ -1,11 +1,11 @@
 import { selectUser } from '../../redux/auth/authSelector';
-import { logoutThunk } from '../../redux/auth/authOperations';
+import { logOut } from '../../redux/auth/authOperations';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const UserMenu = () => {
     const dispatch = useDispatch();
     const handleLogout = () => {
-        dispatch(logoutThunk());
+        dispatch(logOut());
     };
 
     const user = useSelector(selectUser);
