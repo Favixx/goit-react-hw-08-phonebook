@@ -33,7 +33,7 @@ export const register = createAsyncThunk(
             token.set(response.data.token);
             return response.data;
         } catch (error) {
-            toast.error('Email or password is invalid, use valid data for registration', {
+            toast.error('The account with this email is already exists. OR Email or password is invalid, use valid data for registration.', {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
