@@ -4,7 +4,7 @@ import { addContact } from 'redux/contactsOperations.js';
 import { contactsSelector } from 'redux/selectors';
 
 export const ContactForm = () => {
-    const [contact, setContact] = useState({ name: '', phone: '' });
+    const [contact, setContact] = useState({ name: '', number: '' });
     const contacts = useSelector(contactsSelector);
     const dispatch = useDispatch();
 
@@ -19,16 +19,16 @@ export const ContactForm = () => {
         return contacts.find(contact => contact.name === name);
     };
 
-    const checkPhone = phone => {
-        return contacts.find(contact => contact.phone === phone);
+    const checkPhone = number => {
+        return contacts.find(contact => contact.number === number);
     }
 
     const handleSubmit = e => {
         e.preventDefault();
-        if (checkName(contact.name) || checkPhone(contact.phone)) {
+        if (checkName(contact.name) || checkPhone(contact.number)) {
             setContact({
                 name: '',
-                phone: '',
+                number: '',
             });
             alert('Такий контакт вже існує...');
 
@@ -39,7 +39,7 @@ export const ContactForm = () => {
         dispatch(addContact(newContact));
         setContact({
             name: '',
-            phone: '',
+            number: '',
         });
     };
 
@@ -69,13 +69,13 @@ export const ContactForm = () => {
                 <input
                     type="tel"
                     id="number"
-                    name="phone"
+                    name="number"
                     className="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
                     pattern="\+?\d{1,4}[-.\s]?\(?\d{1,3}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                     title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                     placeholder="Phone"
                     required
-                    value={contact.phone}
+                    value={contact.number}
                     onChange={handleChange}
                 />
             </div>
