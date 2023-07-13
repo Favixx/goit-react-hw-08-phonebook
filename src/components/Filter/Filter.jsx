@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getFilter } from '../../redux/filterSlice';
+import { getFilter } from '../../redux/contactsSlice';
 import { filterSelector } from '../../redux/selectors';
 
 export const Filter = () => {
-  const { filter } = useSelector(filterSelector);
+  const filter = useSelector(filterSelector);
   const dispatch = useDispatch();
 
   const handleFilter = e => {

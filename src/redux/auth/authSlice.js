@@ -22,12 +22,6 @@ const initialState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    // Додайте дію для встановлення токена
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
-  },
   extraReducers: (builder) => {
     builder
       .addCase(registerThunk.pending, (state) => {
@@ -90,6 +84,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setToken } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
