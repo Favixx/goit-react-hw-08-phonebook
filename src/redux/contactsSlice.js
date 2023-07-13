@@ -6,7 +6,6 @@ const initialState = {
     filter: '',
     isLoading: false,
     isError: null,
-    visibleForm: false,
 };
 
 const contactsSlice = createSlice({
@@ -16,15 +15,11 @@ const contactsSlice = createSlice({
         getFilter(state, action) {
             state.filter = action.payload;
         },
-        toogleVisibleForm(state) {
-            state.visibleForm = !state.visibleForm;
-        },
         logOutContacts(state) {
             state.contacts = [];
             state.filter = '';
             state.isLoading = false;
             state.isError = null;
-            state.visibleForm = false;
         },
     },
     extraReducers: (builder) => {
@@ -48,7 +43,6 @@ const contactsSlice = createSlice({
             .addCase(addContact.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.contacts.push(action.payload);
-                state.visibleForm = !state.visibleForm;
             })
             .addCase(addContact.rejected, (state, action) => {
                 state.isLoading = false;
@@ -71,6 +65,6 @@ const contactsSlice = createSlice({
     },
 });
 
-export const { getFilter, toogleVisibleForm, logOutContacts } =
+export const { getFilter, logOutContacts } =
     contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;
