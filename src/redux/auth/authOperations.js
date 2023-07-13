@@ -1,29 +1,28 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { privateApi, token } from './api';
-import { selectToken } from './authSelector';
-import { useSelector } from 'react-redux';
+import { authSlice } from './authSlice';
 
 export const loginThunk = createAsyncThunk(
     'auth/login',
-    async (body, { rejectWithValue }) => {
-        console.log('body', body)
+    async (body, { rejectWithValue, dispatch }) => {
         try {
             const response = await privateApi.post('/users/login', body);
             token.set(response.data.token);
-            console.log('response.data', response.data)
+            dispatch(authSlice.actions.setToken(response.data.token));
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);
         }
     }
 );
+
 export const registerThunk = createAsyncThunk(
     'auth/register',
-    async (body, { rejectWithValue }) => {
+    async (body, { rejectWithValue, dispatch }) => {
         try {
             const response = await privateApi.post('/users/signup', body);
             token.set(response.data.token);
-
+            dispatch(authSlice.actions.setToken(response.data.token));
             return response.data;
         } catch (error) {
             return rejectWithValue();
@@ -33,16 +32,15 @@ export const registerThunk = createAsyncThunk(
 
 export const getUserThunk = createAsyncThunk(
     'auth/getUser',
-    async (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue, dispatch, getState }) => {
         try {
-            const tokenValue = useSelector(selectToken());
+            const state = getState();
+            const tokenValue = state.auth.token;
             if (!tokenValue) {
                 return rejectWithValue();
             }
             token.set(tokenValue);
-            console.log('token', tokenValue)
             const response = await privateApi.get('/users/current');
-
             return response.data;
         } catch (error) {
             token.unSet();
@@ -53,10 +51,11 @@ export const getUserThunk = createAsyncThunk(
 
 export const logoutThunk = createAsyncThunk(
     'auth/logout',
-    async (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue, dispatch }) => {
         try {
             const response = await privateApi.post('/users/logout');
             token.unSet();
+            dispatch(authSlice.actions.setToken(''));
             return response.data;
         } catch (error) {
             return rejectWithValue();

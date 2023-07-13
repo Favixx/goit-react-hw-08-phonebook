@@ -11,12 +11,16 @@ import { PublicRoute } from './Routes/PublicRoute';
 import { getUserThunk } from '../redux/auth/authOperations'
 import { UserMenu } from './UserMenu/UserMenu';
 import Navigation from './Navigation/Navigation';
+import { setToken } from 'redux/auth/authSlice';
 
 
 export const App = () => {
   const isAuth = useSelector(selectIsAuth)
   const dispatch = useDispatch();
-
+  const token = localStorage.getItem('token');
+  if (token) {
+    dispatch(setToken(token));
+  }
   useEffect(() => {
     !isAuth && dispatch(getUserThunk())
   }, [dispatch, isAuth])

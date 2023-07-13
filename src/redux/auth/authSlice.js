@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import {
   getUserThunk,
   loginThunk,
@@ -21,9 +22,15 @@ const initialState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  extraReducers: builder => {
+  reducers: {
+    // Додайте дію для встановлення токена
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
     builder
-      .addCase(registerThunk.pending, state => {
+      .addCase(registerThunk.pending, (state) => {
         state.isLoading = true;
         state.isError = '';
       })
@@ -38,7 +45,7 @@ export const authSlice = createSlice({
         state.isError = action.error.message;
         state.isRefresher = false;
       })
-      .addCase(loginThunk.pending, state => {
+      .addCase(loginThunk.pending, (state) => {
         state.isLoading = true;
         state.isError = '';
       })
@@ -53,7 +60,7 @@ export const authSlice = createSlice({
         state.isError = action.error.message;
         state.isRefresher = false;
       })
-      .addCase(getUserThunk.pending, state => {
+      .addCase(getUserThunk.pending, (state) => {
         state.isLoading = true;
         state.isError = '';
         state.isRefresher = true;
@@ -69,10 +76,10 @@ export const authSlice = createSlice({
         state.isError = action.error.message;
         state.isRefresher = false;
       })
-      .addCase(logoutThunk.pending, state => {
+      .addCase(logoutThunk.pending, (state) => {
         state.isError = '';
       })
-      .addCase(logoutThunk.fulfilled, state => {
+      .addCase(logoutThunk.fulfilled, (state) => {
         state.user = initialState.user;
         state.isAuth = false;
         state.isLoading = false;
@@ -82,5 +89,7 @@ export const authSlice = createSlice({
       .addCase(logoutThunk.rejected, () => initialState);
   },
 });
+
+export const { setToken } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
