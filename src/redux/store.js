@@ -9,18 +9,15 @@ const contactsPersistConfig = {
     storage,
     whitelist: []
 };
+
 const authPersistConfig = {
     key: 'auth',
     storage,
     whitelist: ['token'],
 }
 
-
 const persistedReducer = persistReducer(contactsPersistConfig, contactsReducer);
-
-
 const authPersistedReducer = persistReducer(authPersistConfig, authReducer);
-
 
 export const store = configureStore({
     reducer: {
@@ -28,4 +25,5 @@ export const store = configureStore({
         auth: authPersistedReducer,
     },
 });
+
 export const persistor = persistStore(store);

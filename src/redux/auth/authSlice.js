@@ -11,7 +11,7 @@ const initialState = {
     name: '',
     email: '',
   },
-  token: null,
+  token: '',
   isAuth: false,
   isRefresher: false,
   isLoading: false,

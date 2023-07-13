@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { privateApi, token } from './api';
 import { selectToken } from './authSelector';
+import { useSelector } from 'react-redux';
 
 export const loginThunk = createAsyncThunk(
     'auth/login',
@@ -32,14 +33,14 @@ export const registerThunk = createAsyncThunk(
 
 export const getUserThunk = createAsyncThunk(
     'auth/getUser',
-    async (_, { rejectWithValue, getState }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const tokenValue = selectToken(getState());
+            const tokenValue = useSelector(selectToken());
             if (!tokenValue) {
                 return rejectWithValue();
             }
             token.set(tokenValue);
-
+            console.log('token', tokenValue)
             const response = await privateApi.get('/users/current');
 
             return response.data;
