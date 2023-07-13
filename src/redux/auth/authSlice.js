@@ -7,50 +7,79 @@ import {
 } from './authOperations';
 
 const initialState = {
+  user: {
+    name: '',
+    email: '',
+  },
   token: null,
-  isLoading: false,
-  isError: null,
   isAuth: false,
-  user: null,
+  isRefresher: false,
+  isLoading: false,
+  isError: false,
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   extraReducers: builder => {
     builder
-      .addCase(loginThunk.pending, state => {
-        state.isLoading = true;
-      })
-      .addCase(loginThunk.fulfilled, (state, { payload }) => {
-        state.user = payload.user;
-        state.isLoading = false;
-        state.token = payload.token;
-        state.isAuth = true;
-      })
-      .addCase(loginThunk.rejected, state => {
-        state.isLoading = false;
-        state.isError = true;
-      })
       .addCase(registerThunk.pending, state => {
         state.isLoading = true;
+        state.isError = '';
       })
       .addCase(registerThunk.fulfilled, (state, { payload }) => {
         state.user = payload.user;
-        state.isLoading = false;
         state.token = payload.token;
         state.isAuth = true;
-      })
-      .addCase(registerThunk.rejected, state => {
         state.isLoading = false;
-        state.isError = true;
+      })
+      .addCase(registerThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.error.message;
+        state.isRefresher = false;
+      })
+      .addCase(loginThunk.pending, state => {
+        state.isLoading = true;
+        state.isError = '';
+      })
+      .addCase(loginThunk.fulfilled, (state, { payload }) => {
+        state.user = payload.user;
+        state.token = payload.token;
+        state.isAuth = true;
+        state.isLoading = false;
+      })
+      .addCase(loginThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.error.message;
+        state.isRefresher = false;
+      })
+      .addCase(getUserThunk.pending, state => {
+        state.isLoading = true;
+        state.isError = '';
+        state.isRefresher = true;
       })
       .addCase(getUserThunk.fulfilled, (state, { payload }) => {
-        state.isAuth = true;
         state.user = payload;
+        state.isAuth = true;
+        state.isLoading = false;
+        state.isRefresher = false;
       })
-      .addCase(getUserThunk.rejected, () => initialState)
-      .addCase(logoutThunk.fulfilled, () => initialState);
+      .addCase(getUserThunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = action.error.message;
+        state.isRefresher = false;
+      })
+      .addCase(logoutThunk.pending, state => {
+        state.isError = '';
+      })
+      .addCase(logoutThunk.fulfilled, state => {
+        state.user = initialState.user;
+        state.isAuth = false;
+        state.isLoading = false;
+        state.isRefresher = false;
+        state.token = '';
+      })
+      .addCase(logoutThunk.rejected, () => initialState);
   },
 });
 

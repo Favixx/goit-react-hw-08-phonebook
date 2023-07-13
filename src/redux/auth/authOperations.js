@@ -5,12 +5,14 @@ import { selectToken } from './authSelector';
 export const loginThunk = createAsyncThunk(
     'auth/login',
     async (body, { rejectWithValue }) => {
+        console.log('body', body)
         try {
             const response = await privateApi.post('/users/login', body);
             token.set(response.data.token);
+            console.log('response.data', response.data)
             return response.data;
         } catch (error) {
-            return rejectWithValue();
+            return rejectWithValue(error.message);
         }
     }
 );

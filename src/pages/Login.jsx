@@ -1,17 +1,27 @@
 import { loginThunk } from '../redux/auth/authOperations';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectIsAuth } from 'redux/auth/authSelector';
 
 export const Login = () => {
-    const [email, setEmaitl] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate()
     const dispatch = useDispatch();
+    const isAuth = useSelector(selectIsAuth);
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/contacts')
+        }
+    }, [isAuth, navigate])
 
     const handleChange = e => {
         const { name, value } = e.target;
         switch (name) {
             case 'email':
-                setEmaitl(value);
+                setEmail(value);
                 break;
             case 'password':
                 setPassword(value);
@@ -25,7 +35,7 @@ export const Login = () => {
         event.preventDefault();
         dispatch(loginThunk({ email, password }));
 
-        setEmaitl('');
+        setEmail('');
         setPassword('');
     };
 
